@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "975861240906",
+    "project_id": "realstate-12e4a",
+    "storage_bucket": "realstate-12e4a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:975861240906:android:d62ba31f24d403348202b3",
+        "android_client_info": {
+          "package_name": "com.example.realstate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLH5qXLALa10ftA0iykQb5oGciKoKiYDk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
