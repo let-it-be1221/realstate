@@ -12,7 +12,8 @@ class Houses extends ConsumerStatefulWidget {
 }
 
 class _HousesState extends ConsumerState<Houses> {
-  // isFav = false;
+  bool isFav = false;
+  int selectedIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,9 @@ class _HousesState extends ConsumerState<Houses> {
                   // final List<String> imageUrls = List<String>.from(house.imageUrls.cast<String>());
                   return GestureDetector(
                     onTap: () {
+                      setState(() {
+                    selectedIndex = index; // Update the selected house index
+                  });
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -48,6 +52,7 @@ class _HousesState extends ConsumerState<Houses> {
                               DetailsScreen(house: house, initialIndex: index),
                         ),
                       );
+                      
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -72,62 +77,35 @@ class _HousesState extends ConsumerState<Houses> {
                                   right: appPadding / 2,
                                   top: appPadding / 2,
                                   child: Container(
-                                    decoration: BoxDecoration(
-                                        color: white,
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child:
-IconButton(
-  icon: Icon(
-    house.isFav ? Icons.favorite : Icons.favorite_border,
-    color: house.isFav ? Colors.red : null,
-  ),
-  onPressed: () {
-    final houseApi = ref.read(houseProvider);
-    if (house.isFav) {
-      houseApi.removeFromFavorites(house);
-    } else {
-      houseApi.addToFavorites(house);
-    }
-  },
-),
-
-                                    //  IconButton(
-                                    //   icon: Icon(Icons.favorite_rounded),
-                                    //   color: house.isFav
-                                    //       ? Colors.red
-                                    //       : Colors.grey,
-                                    //   // icon: house.isFav
-                                    //   //     ? Icon(
-                                    //   //         Icons.favorite_rounded,
-                                    //   //         color: red,
-                                    //   //       )
-                                    //   //     : Icon(
-                                    //   //         Icons.favorite_border_rounded,
-                                    //   //         color: black,
-                                    //   //       ),
-                                    //   onPressed: () {
-                                    //     setState(() {
-                                    //       ///house.isFav = !house.isFav;
-                                    //       if (house.isFav) {
-                                    //         ref
-                                    //             .watch(houseProvider)
-                                    //             .addToFavorites(house);
-                                    //       } else
-                                    //         ref
-                                    //             .watch(houseProvider)
-                                    //             .removeFromFavorites(house);
-                                    //     });
-                                    //   },
-                                    // ),
-                                  ),
+                                      decoration: BoxDecoration(
+                                          color: white,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: IconButton(
+                                        onPressed: () {
+                                          final houseApi =
+                                              ref.read(houseProvider);
+                                          if (house.isFav) {
+                                            houseApi.removeFromFavorites(house);
+                                          } else {
+                                            houseApi.addToFavorites(house);
+                                          }
+                                        },
+                                        icon: Icon(
+                                          house.isFav
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color:
+                                              house.isFav ? Colors.red : null,
+                                        ),
+                                      )),
                                 )
                               ],
                             ),
                             Row(
                               children: [
                                 Text(
-                                  house.price.toStringAsFixed(3),
+                                  'Price   ${house.price} birr',
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -138,7 +116,7 @@ IconButton(
                                 ),
                                 Expanded(
                                   child: Text(
-                                    house.address,
+                                    'Address    ${house.address}',
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         fontSize: 15,
@@ -150,26 +128,48 @@ IconButton(
                             Row(
                               children: [
                                 Text(
-                                  house.bed_rooms.toStringAsFixed(3),
+                                  'Bed rooms  ${house.bed_rooms.toString()}',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
                                   ),
+                                ),
+                                SizedBox(
+                                  width: 15,
                                 ),
                                 Text(
-                                  house.bath_rooms.toStringAsFixed(3),
+                                  'Bath rooms ${house.bath_rooms.toString()}',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
                                   ),
+                                ),
+                                SizedBox(
+                                  width: 15,
                                 ),
                                 Text(
-                                  house.square_feet.toStringAsFixed(3),
+                                  'Feet ${house.square_feet.toString()}',
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Container(
+                                  height: 20,
+                                  width: 48,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: Colors.red),
+                                  child: Text(
+                                    house.type,
+                                    style: TextStyle(
+                                        fontSize: 15, color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )
                               ],
                             )
                           ],
@@ -180,8 +180,8 @@ IconButton(
                 });
           },
           error: (error, stackTrace) {
-            print("Error: $error");
-            return const Center(child: Text("error"));
+            //print("Error: $error");
+            return const Center(child: Text("No Post"));
           },
           loading: () => const CircularProgressIndicator()),
     );

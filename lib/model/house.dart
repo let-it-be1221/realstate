@@ -18,31 +18,32 @@ class House {
   final int garages;
   final String description;
   bool isFav;
-  final String status;
+  final status;
   //final String imageUrl;
   final List<String> imageUrls;
   final Timestamp postTime;
-
-void toggleFavorite() {
+  final int phone_number;
+  final String type;
+  void toggleFavorite() {
     isFav = !isFav;
   }
 
-
-  House({
-    required this.uid,
-    required this.address,
-    required this.price,
-    required this.bed_rooms,
-    required this.bath_rooms,
-    required this.square_feet,
-    required this.kitchen,
-    required this.garages,
-    required this.description,
-    required this.imageUrls,
-    required this.postTime,
-    required this.isFav,
-    required this.status,
-  });
+  House(
+      {required this.uid,
+      required this.address,
+      required this.price,
+      required this.bed_rooms,
+      required this.bath_rooms,
+      required this.square_feet,
+      required this.kitchen,
+      required this.garages,
+      required this.description,
+      required this.imageUrls,
+      required this.postTime,
+      required this.isFav,
+      required this.status,
+      required this.phone_number,
+      required this.type,});
 
   House copyWith({
     String? uid,
@@ -59,6 +60,7 @@ void toggleFavorite() {
     Timestamp? postTime,
     bool? isFav,
     String? status,
+    String? type,
   }) {
     return House(
       uid: uid ?? this.uid,
@@ -75,6 +77,8 @@ void toggleFavorite() {
       postTime: postTime ?? this.postTime,
       isFav: isFav ?? this.isFav,
       status: status ?? this.status,
+      phone_number: phone_number ?? this.phone_number,
+      type: type ?? this.type,
     );
   }
 
@@ -94,6 +98,8 @@ void toggleFavorite() {
       'postTime': postTime,
       'isFav': isFav,
       'status': status,
+      'phone_number': phone_number,
+      'type': type,
     };
   }
 
@@ -115,6 +121,8 @@ void toggleFavorite() {
       postTime: map['postTime'],
       isFav: map['isFav'],
       status: map['status'] as String,
+      phone_number: map['phone_number'] as int,
+      type: map['type'] as String,
     );
   }
 
@@ -125,7 +133,7 @@ void toggleFavorite() {
 
   @override
   String toString() {
-    return 'House(uid: $uid, address: $address, price: $price, bed_rooms: $bed_rooms, bath_rooms: $bath_rooms, square_feet: $square_feet, kitchen: $kitchen, garages: $garages, description: $description,  imageUrls: $imageUrls, postTime: $postTime, isFav: $isFav,status: $status)';
+    return 'House(uid: $uid, address: $address, price: $price, bed_rooms: $bed_rooms, bath_rooms: $bath_rooms, square_feet: $square_feet, kitchen: $kitchen, garages: $garages, description: $description,  imageUrls: $imageUrls, postTime: $postTime, isFav: $isFav,status: $status, phone_number: $phone_number, type: $type)';
   }
 
   @override
@@ -146,7 +154,9 @@ void toggleFavorite() {
         listEquals(other.imageUrls, imageUrls) &&
         other.postTime == postTime &&
         other.isFav == isFav &&
-        other.status == status;
+        other.status == status &&
+        other.phone_number == phone_number &&
+        other.type == type;
   }
 
   @override
@@ -164,6 +174,8 @@ void toggleFavorite() {
         imageUrls.hashCode ^
         postTime.hashCode ^
         isFav.hashCode ^
-        status.hashCode;
+        status.hashCode ^
+        phone_number.hashCode ^
+        type.hashCode;
   }
 }

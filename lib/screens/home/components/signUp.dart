@@ -29,111 +29,115 @@ class _HomePageState extends ConsumerState<SignUp> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image(image:AssetImage("assets/logo.png"),width: 100,height: 100,),
-          Text(
-            "Sign Up with Twitter",
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Form(
-              key: _signInkey,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 237, 234, 234),
-                          borderRadius: BorderRadius.circular(30)),
-                      child: TextFormField(
-                        controller: _emailController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please Enter Your Email";
-                          } else if (!emailValid.hasMatch(value)) {
-                            return "Please Enter A valid Emali";
-                          }
-                        },
-                        decoration: InputDecoration(
-                          hintText: "Email",
-                          contentPadding: EdgeInsets.only(left: 15),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 237, 234, 234),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: TextFormField(
-                        controller: _passwordController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please Enter Your Password";
-                          } else if (value.length < 6) {
-                            return "Password must be 6 character";
-                          }
-                        },
-                        decoration: InputDecoration(
-                            hintText: "Password",
-                            contentPadding: EdgeInsets.only(left: 15),
-                            border: InputBorder.none),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      width: 250,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.blue),
-                      child: TextButton(
-                        onPressed: () async {
-                          if (_signInkey.currentState!.validate()) {
-                            try {
-                              await _auth.createUserWithEmailAndPassword(
-                                  email: _emailController.text,
-                                  password: _passwordController.text);
-                          await ref
-                                  .read(userProvider.notifier)
-                                  .signUp(_emailController.text);
-                              if (!mounted) return;
-                              Navigator.of(context).pop();
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                (SnackBar(content: Text(e.toString()))),
-                              );
+          body: Container(
+            decoration: BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/h2.jpg'),
+        fit: BoxFit.cover,
+      )
+      ),
+
+
+
+            child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+             
+            Form(
+                key: _signInkey,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 150, 150, 150),
+                            borderRadius: BorderRadius.circular(30)),
+                        child: TextFormField(
+                          controller: _emailController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please Enter Your Email";
+                            } else if (!emailValid.hasMatch(value)) {
+                              return "Please Enter A valid Emali";
                             }
-    
-                            // debugPrint("Email :${_emailController.text}");i
-                            //debugPrint("Password :${_passwordController.text}");
-                          }
-                        },
-                        child: Text(
-                          "Sign Up",
-                          style: TextStyle(color: Colors.white),
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Email",
+                            contentPadding: EdgeInsets.only(left: 15),
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          ;
-                        },
-                        child:
-                            Text("Already have An Account? Click here to Login"))
-                  ],
-                ),
-              )),
-        ],
-      )),
+                      SizedBox(height: 10),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 150, 150, 150),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: TextFormField(
+                          controller: _passwordController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please Enter Your Password";
+                            } else if (value.length < 6) {
+                              return "Password must be 6 character";
+                            }
+                          },
+                          decoration: InputDecoration(
+                              hintText: "Password",
+                              contentPadding: EdgeInsets.only(left: 15),
+                              border: InputBorder.none),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        width: 250,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: Color.fromARGB(255, 188, 125, 31)),
+                        child: TextButton(
+                          onPressed: () async {
+                            if (_signInkey.currentState!.validate()) {
+                              try {
+                                await _auth.createUserWithEmailAndPassword(
+                                    email: _emailController.text,
+                                    password: _passwordController.text);
+                            await ref
+                                    .read(userProvider.notifier)
+                                    .signUp(_emailController.text);
+                                if (!mounted) return;
+                                Navigator.of(context).pop();
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  (SnackBar(content: Text(e.toString()))),
+                                );
+                              }
+                
+                              // debugPrint("Email :${_emailController.text}");i
+                              //debugPrint("Password :${_passwordController.text}");
+                            }
+                          },
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(color: Color.fromARGB(255, 203, 203, 203)),
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            ;
+                          },
+                          child:
+                              Text("Already have An Account? Click here to Login"))
+                    ],
+                  ),
+                )),
+                    ],
+                  ),
+          )),
     );
   }
 }

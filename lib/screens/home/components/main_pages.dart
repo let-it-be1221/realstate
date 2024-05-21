@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realstate/provider/user_provider.dart';
 import 'package:realstate/screens/home/components/chat.dart';
-import 'package:realstate/screens/home/components/drawer.dart';
+//import 'package:realstate/screens/home/components/drawer.dart';
 import 'package:realstate/screens/home/components/favourite.dart';
 import 'package:realstate/screens/home/components/search_page.dart';
 import 'package:realstate/screens/home/components/settings.dart';
@@ -98,9 +98,16 @@ class _MainPageState extends ConsumerState<MainPage> {
               decoration: BoxDecoration(
                 color: Colors.white,
               ),
-              child:  CircleAvatar(
-                backgroundImage: const AssetImage('assets/images/user.png'),
-              )
+              child: 
+              Column(children: [
+CircleAvatar(
+  radius: 50,
+  backgroundImage: NetworkImage(ref.watch(userProvider).user.profilePic),
+),
+Text(ref.watch(userProvider).user.name)
+
+              ],)
+               
             ),
             ListTile(
               leading: Icon(Icons.home),

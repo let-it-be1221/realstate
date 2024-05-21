@@ -33,9 +33,11 @@ class _Add_ListingState extends ConsumerState<Add_Listing> {
   final TextEditingController garagesController = TextEditingController();
 
   final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
   final picker = ImagePicker();
   List<File> images = [];
   String image = '';
+String selectedOption = '';
 
   Future<void> getImages() async {
     final pickedFiles = await picker.pickMultiImage();
@@ -60,6 +62,7 @@ class _Add_ListingState extends ConsumerState<Add_Listing> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
           title: Text('Add New Listing'),
@@ -217,6 +220,43 @@ class _Add_ListingState extends ConsumerState<Add_Listing> {
                   ),
                 ),
                 SizedBox(height: 16.0),
+
+TextFormField(
+                  controller: phoneController,
+                  decoration: InputDecoration(
+                    labelText: 'Phone Number',
+                    hintText: '9-xx-xx-xx-xx',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+
+ RadioListTile(
+            title: Text('Rent'),
+            value: 'Rent',
+            groupValue: selectedOption,
+            onChanged: (value) {
+              setState(() {
+                selectedOption = value.toString();
+              });
+            },
+          ),
+          RadioListTile(
+            title: Text('Sell'),
+            value: 'Sell',
+            groupValue: selectedOption,
+            onChanged: (value) {
+              setState(() {
+                selectedOption = value.toString();
+              });
+            },
+          ),
+
                 TextFormField(
                   controller: descriptionController,
                   maxLines: 7,
@@ -250,7 +290,9 @@ class _Add_ListingState extends ConsumerState<Add_Listing> {
                           int.parse(garagesController.text),
                           descriptionController.text,
                           false,
-                          'pending...'
+                          'pending...',
+                          int.parse(phoneController.text),
+                          selectedOption,
                         );
                     addressController.clear();
                     priceController.clear();
@@ -260,6 +302,7 @@ class _Add_ListingState extends ConsumerState<Add_Listing> {
                     kitchenController.clear();
                     garagesController.clear();
                     descriptionController.clear();
+                    phoneController.clear();
                   
                     Navigator.pop(context);
                   },

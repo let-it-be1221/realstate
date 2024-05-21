@@ -21,20 +21,20 @@ class _SettingsState extends ConsumerState<Settings> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      // appBar: AppBar(
+      appBar: AppBar(
         
-      //   title: Text(
-      //     "Settings",
-      //     style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-      //   ),
-      //   centerTitle: true,
-      // ),
+        title: Text(
+          "Settings",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+        ),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
 
 
-            Text("Settings",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20, color: Colors.red),),
+           // Text("Settings",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20, color: Colors.red),),
            Divider(
             ),
             SizedBox(height: 10,),
@@ -44,24 +44,28 @@ class _SettingsState extends ConsumerState<Settings> {
                 SizedBox(
                   width: 5,
                 ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage('assets/images/user.png'),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(ref.watch(userProvider).user.profilePic),
+                      ),
                     ),
                   ),
                 ),
                 SizedBox(width: 10),
-                Text(
-                  'Thomas Edson',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                Expanded(
+                  child: Text(
+                    ref.watch(userProvider).user.name,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
                 ),
-                SizedBox(width: 100),
+                SizedBox(width: 50),
                 Container(
                   decoration: BoxDecoration(
                       color: Colors.red,
@@ -74,7 +78,8 @@ class _SettingsState extends ConsumerState<Settings> {
                         Icons.edit,
                         color: Colors.white,
                       )),
-                )
+                ),
+                SizedBox(width: 15,),
               ],
             ),
             ListTile(

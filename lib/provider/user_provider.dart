@@ -79,7 +79,7 @@ class UserNotifier extends StateNotifier<LocalUser> {
 // Update Name
 
   Future<void> updateName(String name) async {
-    await _firestore.collection("users").doc(state.id).update({'name': name});
+    await _firestore.collection("users").doc(state.id).update({'name': name,});
     state = state.copyWith(user: state.user.copyWith(name: name));
   }
 

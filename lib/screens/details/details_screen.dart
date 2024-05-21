@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:realstate/model/house.dart';
 import 'package:realstate/screens/details/components/bottom_buttons.dart';
@@ -28,10 +29,10 @@ final House house;
                   CustomAppBar(),
                 ],
               ),
-              HouseDetails(),
+              HouseDetails(initialIndex),
             ],
           ),
-          BottomButtons(),
+          BottomButtons(initialIndex),
         ],
       ),
     );

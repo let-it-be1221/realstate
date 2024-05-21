@@ -1,10 +1,16 @@
+import 'dart:io';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:realstate/provider/user_provider.dart';
 
-class Edit_Profile extends StatelessWidget {
+class Edit_Profile extends ConsumerWidget {
+  final TextEditingController _nameController = TextEditingController();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
@@ -26,8 +32,10 @@ class Edit_Profile extends StatelessWidget {
                   child: Stack(children: [
                     CircleAvatar(
                       radius: 70.0,
-                      backgroundImage: AssetImage(
-                          'assets/images/house4.png'), // Replace with your desired image
+                      backgroundImage: NetworkImage(ref
+                          .watch(userProvider)
+                          .user
+                          .profilePic), // Replace with your desired image
                       // child: Align(
                       //   alignment: Alignment.bottomRight,
                       //   child: IconButton(
@@ -46,7 +54,17 @@ class Edit_Profile extends StatelessWidget {
                         right: 0,
                         child: Container(
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              final ImagePicker picker = ImagePicker();
+                              // Pick an image.
+                              final XFile? pickedImage = await picker.pickImage(
+                                  source: ImageSource.gallery,
+                                  requestFullMetadata: false);
+                              if (pickedImage != null) {
+                                ref
+                                    .read(userProvider.notifier)
+                                    .updateImage(File(pickedImage.path));
+                              }
                               // Add your save button logic here
                             },
                             style: ButtonStyle(
@@ -66,7 +84,7 @@ class Edit_Profile extends StatelessWidget {
                                   "Change",
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20,
+                                      fontSize: 15,
                                       color: Colors.white),
                                 )
                               ],
@@ -77,19 +95,7 @@ class Edit_Profile extends StatelessWidget {
                 ),
                 SizedBox(height: 20.0),
                 TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    hintText: 'Enter your email',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red, width: 2.0),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
+                  controller: _nameController,
                   decoration: InputDecoration(
                     labelText: 'Name',
                     hintText: 'Enter your name',
@@ -101,36 +107,12 @@ class Edit_Profile extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Phone Number',
-                    hintText: 'Enter your phone number',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red, width: 2.0),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                TextFormField(
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    hintText: 'Enter your password',
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blue),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.red, width: 2.0),
-                    ),
-                  ),
-                  obscureText: true,
-                ),
                 SizedBox(height: 24.0),
                 ElevatedButton(
                   onPressed: () {
+                    ref
+                        .watch(userProvider.notifier)
+                        .updateName(_nameController.text);
                     // Add your save button logic here
                   },
                   style: ButtonStyle(

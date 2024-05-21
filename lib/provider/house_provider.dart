@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ final feedProvider = StreamProvider.autoDispose<List<House>>((ref) {
 });
 
 final houseProvider = Provider<HouseApi>((ref) {
+   
   return HouseApi(ref);
 });
 
@@ -48,8 +50,10 @@ class HouseApi {
     String description,
     bool isFav,
     String status,
+    int phone_number,
+    String type,
   ) async {
-    LocalUser currentUser = ref.read(userProvider);
+   // LocalUser currentUser = ref.read(userProvider);
     List<String> imageUrls = [];
 
     for (int i = 0; i < images.length; i++) {
@@ -66,49 +70,53 @@ class HouseApi {
     // TaskSnapshot snapshot = await imageref.putFile(image as File);
     // String imageUrl = await snapshot.ref.getDownloadURL();
 
-    //CollectionReference houseRef = 
-    await _firestore.collection('houses')
-   // await houseRef.doc(currentUser.id).collection('houseList')
-    .add(House(
-            uid: currentUser.id,
-            address: address,
-            price: price,
-            bed_rooms: bed_rooms,
-            bath_rooms: bath_rooms,
-            square_feet: square_feet,
-            kitchen: kitchen,
-            garages: garages,
-            description: description,
-            imageUrls: imageUrls,
-            postTime: Timestamp.now(),
-            isFav: isFav,
-           status: status, )
-        .toMap());
+    //CollectionReference houseRef =
+    final docRef = await _firestore
+        .collection('houses')
+        // await houseRef.doc(currentUser.id).collection('houseList')
+        .add(House(
+          uid: '',
+          address: address,
+          price: price,
+          bed_rooms: bed_rooms,
+          bath_rooms: bath_rooms,
+          square_feet: square_feet,
+          kitchen: kitchen,
+          garages: garages,
+          description: description,
+          imageUrls: imageUrls,
+          postTime: Timestamp.now(),
+          isFav: isFav,
+          status: status,
+          phone_number: phone_number,
+          type: type,
+        ).toMap());
+
+    final houseUid = docRef.id;
+    //print(houseUid);
+    await docRef.update({'uid': houseUid});
   }
 
-
-Stream<List<House>> get favoriteHousesStream {
-    LocalUser currentUser = ref.read(userProvider);
+  Stream<List<House>> get favoriteHousesStream {
+    //LocalUser currentUser = ref.read(userProvider);
+   // House house = ref.read(houseProvider as ProviderListenable<House>);
 
     return _firestore
         .collection('houses')
-        .where('uid', isEqualTo: currentUser.id)
+        //.where('uid', isEqualTo: house.uid)
         .where('isFav', isEqualTo: true)
         .snapshots()
         .map((QuerySnapshot<Map<String, dynamic>> snapshot) {
-      return snapshot.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+      return snapshot.docs
+          .map((QueryDocumentSnapshot<Map<String, dynamic>> doc) {
         return House.fromMap(doc.data());
       }).toList();
     });
   }
 
-
-
-
-
-
   Future<void> requestSupport(String name, String email, String subject) async {
     LocalUser currentUser = ref.read(userProvider);
+
     CollectionReference reference = await _firestore.collection("support");
     await reference
         .doc(currentUser.id)
@@ -137,44 +145,107 @@ Stream<List<House>> get favoriteHousesStream {
   }
 
   Future<void> addToFavorites(House house) async {
-   try {
-    final docSnapshot = await _firestore
-        .collection('houses')
-        .doc(house.uid)
-        .get();
+    // House house = ref.read(houseProvider as ProviderListenable<House>);
 
-    if (docSnapshot.exists) {
-      await _firestore
-          .collection('houses')
-          .doc(house.uid)
-          .update({'isFav': true});
-      house.toggleFavorite();
-    } else {
-      print('Document not found');
+    try {
+      final docSnapshot =
+          await _firestore.collection('houses').doc(house.uid).get();
+      if (docSnapshot.exists) {
+        await _firestore
+            .collection('favorites')
+            .doc(house.uid)
+            .set(house.toMap());
+
+        await _firestore
+            .collection('houses')
+            .doc(house.uid)
+            .update({'isFav': true});
+        house.toggleFavorite();
+      } else {
+        print('Document not found');
+      }
+    } catch (error) {
+      print('Error adding to favorites: $error');
     }
-  } catch (error) {
-    print('Error adding to favorites: $error');
-  }
   }
 
   Future<void> removeFromFavorites(House house) async {
     try {
-    final docSnapshot = await _firestore
-        .collection('houses')
-        .doc(house.uid)
-        .get();
+      final docSnapshot =
+          await _firestore.collection('houses').doc(house.uid).get();
 
-    if (docSnapshot.exists) {
-      await _firestore
-          .collection('houses')
-          .doc(house.uid)
-          .update({'isFav': false});
-      house.toggleFavorite();
-    } else {
-      print('Document not found');
+      if (docSnapshot.exists) {
+        await _firestore.collection('favorites').doc(house.uid).delete();
+        await _firestore
+            .collection('houses')
+            .doc(house.uid)
+            .update({'isFav': false});
+        house.toggleFavorite();
+      } else {
+        print('Document not found');
+      }
+    } catch (error) {
+      print('Error removing from favorites: $error');
     }
-  } catch (error) {
-    print('Error removing from favorites: $error');
   }
-  }
+
+/////////////////////////////////
+
+// Future<void> addToFavorites(House house) async {
+//     try {
+//       final user = FirebaseAuth.instance.currentUser;
+//       if (user != null) {
+//         final userId = user.uid;
+//         final houseRef = _firestore
+//             .collection('favorites')
+//             .doc(userId)
+//             .collection('favorites')
+//             .doc(house.uid);
+
+//         final docSnapshot = await houseRef.get();
+//         if (!docSnapshot.exists) {
+//           await houseRef.set(house.toMap());
+//           await _firestore
+//               .collection('houses')
+//               .doc(house.uid)
+//               .update({'isFav': true});
+//         } else {
+//           print('House is already in favorites');
+//         }
+//       } else {
+//         print('User is not signed in');
+//       }
+//     } catch (error) {
+//       print('Error adding to favorites: $error');
+//     }
+//   }
+
+//   Future<void> removeFromFavorites(House house) async {
+//     try {
+//       final user = FirebaseAuth.instance.currentUser;
+//       if (user != null) {
+//         final userId = user.uid;
+//         final houseRef = _firestore
+//             .collection('favorites')
+//             .doc(userId)
+//             .collection('favorites')
+//             .doc(house.uid);
+
+//         final docSnapshot = await houseRef.get();
+//         if (docSnapshot.exists) {
+//           await houseRef.delete();
+//           await _firestore
+//               .collection('houses')
+//               .doc(house.uid)
+//               .update({'isFav': false});
+//         } else {
+//           print('House is not in favorites');
+//         }
+//       } else {
+//         print('User is not signed in');
+//       }
+//     } catch (error) {
+//       print('Error removing from favorites: $error');
+//     }
+//   }
 }

@@ -27,108 +27,110 @@ class _Login extends ConsumerState<Login> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-          body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-           Image(image:AssetImage("assets/logo.png"),width: 100,height: 100,),
-          Text(
-            "Log in with Twitter",
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 15,
-          ),
-          Form(
-              key: _signInkey,
-              child: Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 237, 234, 234),
-                          borderRadius: BorderRadius.circular(30)),
-                      child: TextFormField(
-                        controller: _emialController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please Enter Your Email";
-                          } else if (!emailValid.hasMatch(value)) {
-                            return "Please Enter A valid Emali";
-                          }
-                        },
-                        decoration: InputDecoration(
-                          hintText: "Email",
-                          contentPadding: EdgeInsets.only(left: 15),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color.fromARGB(255, 237, 234, 234),
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: TextFormField(
-                        controller: _passwordController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Please Enter Your Password";
-                          } else if (value.length < 6) {
-                            return "Password must be 6 character";
-                          }
-                        },
-                        decoration: InputDecoration(
-                            hintText: "Password",
-                            contentPadding: EdgeInsets.only(left: 15),
-                            border: InputBorder.none),
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Container(
-                      width: 250,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: Colors.blue),
-                      child: TextButton(
-                        onPressed: () async {
-                          if (_signInkey.currentState!.validate()) {
-                            //debugPrint("Email :${_emialController.text}");
-                            //debugPrint("Password :${_passwordController.text}");
-                            try {
-                              await _auth.signInWithEmailAndPassword(
-                                  email: _emialController.text,
-                                  password: _passwordController.text);
-    
-                              ref
-                                  .watch(userProvider.notifier)
-                                  .login(_emialController.text);
-                            } catch (e) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                (SnackBar(content: Text(e.toString()))),
-                              );
+
+          body: Container(
+            decoration: BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/h2.jpg'),
+        fit: BoxFit.cover,
+      )
+      ),
+            child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+              
+            Form(
+                key: _signInkey,
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 150, 150, 150),
+                            borderRadius: BorderRadius.circular(30)),
+                        child: TextFormField(
+                          controller: _emialController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please Enter Your Email";
+                            } else if (!emailValid.hasMatch(value)) {
+                              return "Please Enter A valid Emali";
                             }
-                          }
-                        },
-                        child: Text(
-                          "Login",
-                          style: TextStyle(color: Colors.white),
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Email",
+                            contentPadding: EdgeInsets.only(left: 15),
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) => SignUp()));
-                        },
-                        child: Text("Don't have an Account? Sign Up here"))
-                  ],
-                ),
-              )),
-        ],
-      )),
+                      SizedBox(height: 10),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 150, 150, 150),
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: TextFormField(
+                          controller: _passwordController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please Enter Your Password";
+                            } else if (value.length < 6) {
+                              return "Password must be 6 character";
+                            }
+                          },
+                          decoration: InputDecoration(
+                              hintText: "Password",
+                              contentPadding: EdgeInsets.only(left: 15),
+                              border: InputBorder.none),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        width: 250,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(30),
+                            color: Color.fromARGB(255, 188, 125, 31)),
+                        child: TextButton(
+                          onPressed: () async {
+                            if (_signInkey.currentState!.validate()) {
+                              //debugPrint("Email :${_emialController.text}");
+                              //debugPrint("Password :${_passwordController.text}");
+                              try {
+                                await _auth.signInWithEmailAndPassword(
+                                    email: _emialController.text,
+                                    password: _passwordController.text);
+                
+                                ref
+                                    .watch(userProvider.notifier)
+                                    .login(_emialController.text);
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  (SnackBar(content: Text(e.toString()))),
+                                );
+                              }
+                            }
+                          },
+                          child: Text(
+                            "Login",
+                            style: TextStyle(color:  Color.fromARGB(255, 203, 203, 203)),
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                                MaterialPageRoute(builder: (context) => SignUp()));
+                          },
+                          child: Text("Don't have an Account? Sign Up here"))
+                    ],
+                  ),
+                )),
+                    ],
+                  ),
+          )),
     );
   }
 }
