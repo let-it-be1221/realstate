@@ -3,13 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:realstate/provider/user_provider.dart';
+import 'package:realstate/provider/realtor_provider.dart';
 import 'package:realstate/screens/home/components/add_listing.dart';
 import 'package:realstate/screens/home/components/edit_profile.dart';
 import 'package:realstate/screens/home/components/pdf.dart';
 import 'package:realstate/screens/home/components/support_page.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class Settings extends ConsumerStatefulWidget {
+ class Settings extends ConsumerStatefulWidget {
   const Settings({super.key});
 
   @override
@@ -21,23 +22,15 @@ class _SettingsState extends ConsumerState<Settings> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      appBar: AppBar(
-        
-        title: Text(
-          "Settings",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-        ),
-        centerTitle: true,
-      ),
+       
       body: SingleChildScrollView(
         child: Column(
           children: [
+            // Text("Settings",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20, color: Colors.red),),
 
-
-           // Text("Settings",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20, color: Colors.red),),
-           Divider(
+            SizedBox(
+              height: 10,
             ),
-            SizedBox(height: 10,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -53,7 +46,8 @@ class _SettingsState extends ConsumerState<Settings> {
                       shape: BoxShape.circle,
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(ref.watch(userProvider).user.profilePic),
+                        image: NetworkImage(
+                            ref.watch(userProvider).realtor.profilePic),
                       ),
                     ),
                   ),
@@ -61,7 +55,7 @@ class _SettingsState extends ConsumerState<Settings> {
                 SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    ref.watch(userProvider).user.name,
+                    ref.watch(userProvider).realtor.name,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                 ),
@@ -72,14 +66,19 @@ class _SettingsState extends ConsumerState<Settings> {
                       borderRadius: BorderRadius.circular(100)),
                   child: IconButton(
                       onPressed: () {
-                        Navigator.push(context,  MaterialPageRoute(builder: (context)=>Edit_Profile()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Edit_Profile()));
                       },
                       icon: Icon(
                         Icons.edit,
                         color: Colors.white,
                       )),
                 ),
-                SizedBox(width: 15,),
+                SizedBox(
+                  width: 15,
+                ),
               ],
             ),
             ListTile(
@@ -111,11 +110,11 @@ class _SettingsState extends ConsumerState<Settings> {
               height: 10,
             ),
             ListTile(
-                trailing:
-                    IconButton(onPressed: () 
-                    {
- Navigator.push(context, MaterialPageRoute(builder: ((context) => Pdf(path: 'assets/images/Realtor_Privacy.pdf', text: "Privacy Policy"))));
-                    }, 
+                trailing: IconButton(
+                    onPressed: () async {
+                      await launch('https://drive.google.com/file/d/1xdDJ9Hph9WNffd7U9va5al18U7g6lJeP/view?usp=drive_link');
+                      //Navigator.push(context, MaterialPageRoute(builder: ((context) => Pdf(path: 'assets/images/Realtor_Privacy.pdf', text: "Privacy Policy"))));
+                    },
                     icon: Icon(Icons.arrow_forward)),
                 leading: Text(
                   "Privacy Policy",
@@ -126,13 +125,12 @@ class _SettingsState extends ConsumerState<Settings> {
               endIndent: 10,
             ),
             ListTile(
-                trailing:
-                    IconButton(
-                      onPressed: () 
-                      {
-                       Navigator.push(context, MaterialPageRoute(builder: ((context) => Pdf(path: 'assets/images/Terms_of_Use.pdf', text: "Terms Of Use"))));
-                      },
-                       icon: Icon(Icons.arrow_forward)),
+                trailing: IconButton(
+                    onPressed: () async {
+                      await launch('https://drive.google.com/file/d/1peMm5LT2L_mF6vawuRN46ApR35CMX7_8/view?usp=drive_link');
+                      // Navigator.push(context, MaterialPageRoute(builder: ((context) => Pdf(path: 'assets/images/Terms_of_Use.pdf', text: "Terms Of Use"))));
+                    },
+                    icon: Icon(Icons.arrow_forward)),
                 leading: Text(
                   "Terms of use",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -161,10 +159,14 @@ class _SettingsState extends ConsumerState<Settings> {
               height: 15,
             ),
             ListTile(
-                trailing:
-                    IconButton(onPressed: () {
-                   Navigator.push(context, MaterialPageRoute(builder: ((context) => SupportPage())));   
-                    }, icon: Icon(Icons.arrow_forward)),
+                trailing: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => SupportPage())));
+                    },
+                    icon: Icon(Icons.arrow_forward)),
                 leading: Text(
                   "Support",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -174,8 +176,8 @@ class _SettingsState extends ConsumerState<Settings> {
               endIndent: 10,
             ),
             ListTile(
-                trailing:
-                    IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward)),
+                trailing: IconButton(
+                    onPressed: () {}, icon: Icon(Icons.arrow_forward)),
                 leading: Text(
                   "Report a Bug",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -185,8 +187,8 @@ class _SettingsState extends ConsumerState<Settings> {
               endIndent: 10,
             ),
             ListTile(
-                trailing:
-                    IconButton(onPressed: () {}, icon: Icon(Icons.arrow_forward)),
+                trailing: IconButton(
+                    onPressed: () {}, icon: Icon(Icons.arrow_forward)),
                 leading: Text(
                   "App Version 1.0",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
@@ -210,16 +212,19 @@ class _SettingsState extends ConsumerState<Settings> {
                     width: 10,
                   ),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       FirebaseAuth.instance.signOut();
-                ref.watch(userProvider.notifier).logOut();
+                      ref.watch(userProvider.notifier).logOut();
                     },
                     child: Text(
                       "Logout",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                 ],
               ),
             )
@@ -227,10 +232,10 @@ class _SettingsState extends ConsumerState<Settings> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: ()
-         {
-          Navigator.push(context, MaterialPageRoute(builder: ((context) => Add_Listing())));
-         },
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: ((context) => Add_Listing())));
+        },
         child: Icon(
           Icons.add,
           color: Colors.white,

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:realstate/provider/user_provider.dart';
+import 'package:realstate/provider/realtor_provider.dart';
 
 class Edit_Profile extends ConsumerWidget {
   final TextEditingController _nameController = TextEditingController();
@@ -34,7 +34,7 @@ class Edit_Profile extends ConsumerWidget {
                       radius: 70.0,
                       backgroundImage: NetworkImage(ref
                           .watch(userProvider)
-                          .user
+                          .realtor
                           .profilePic), // Replace with your desired image
                       // child: Align(
                       //   alignment: Alignment.bottomRight,

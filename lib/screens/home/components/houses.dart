@@ -18,23 +18,9 @@ class _HousesState extends ConsumerState<Houses> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return
-        // Expanded(
-        //   child: ListView.builder(
-        //     physics: BouncingScrollPhysics(),
-        //     itemCount: 2,
-        //     itemBuilder: (context, index) {
-        //       return _buildHouse(context, index);
-        //     },
-        //   ),
-        // );
-
-        Expanded(
+    return Expanded(
       child: ref.watch(feedProvider).when(
           data: (List<House> house_list) {
-            print(
-              house_list[0].price.toString(),
-            );
             return ListView.builder(
                 itemCount: house_list.length,
                 itemBuilder: (context, index) {
@@ -43,8 +29,9 @@ class _HousesState extends ConsumerState<Houses> {
                   return GestureDetector(
                     onTap: () {
                       setState(() {
-                    selectedIndex = index; // Update the selected house index
-                  });
+                        selectedIndex =
+                            index; // Update the selected house index
+                      });
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -52,7 +39,6 @@ class _HousesState extends ConsumerState<Houses> {
                               DetailsScreen(house: house, initialIndex: index),
                         ),
                       );
-                      
                     },
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -73,6 +59,9 @@ class _HousesState extends ConsumerState<Houses> {
                                     image: NetworkImage(house.imageUrls[0]),
                                   ),
                                 ),
+
+
+
                                 Positioned(
                                   right: appPadding / 2,
                                   top: appPadding / 2,
@@ -105,9 +94,9 @@ class _HousesState extends ConsumerState<Houses> {
                             Row(
                               children: [
                                 Text(
-                                  'Price   ${house.price} birr',
+                                  'Price ${house.price} ETB',
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -116,13 +105,25 @@ class _HousesState extends ConsumerState<Houses> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    'Address    ${house.address}',
+                                    'Address  ${house.address}',
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         fontSize: 15,
                                         color: black.withOpacity(0.4)),
                                   ),
                                 ),
+                                Expanded(
+                                    child: house.status
+                                        ? Icon(
+                                            Icons.beenhere,
+                                            color: Colors.green,
+                                            size: 30,
+                                          )
+                                        : Icon(
+                                            Icons.error_outline,
+                                            color: Colors.red,
+                                            size: 30,
+                                          )),
                               ],
                             ),
                             Row(
@@ -130,7 +131,7 @@ class _HousesState extends ConsumerState<Houses> {
                                 Text(
                                   'Bed rooms  ${house.bed_rooms.toString()}',
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -140,7 +141,7 @@ class _HousesState extends ConsumerState<Houses> {
                                 Text(
                                   'Bath rooms ${house.bath_rooms.toString()}',
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -150,7 +151,7 @@ class _HousesState extends ConsumerState<Houses> {
                                 Text(
                                   'Feet ${house.square_feet.toString()}',
                                   style: TextStyle(
-                                    fontSize: 15,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
@@ -162,7 +163,7 @@ class _HousesState extends ConsumerState<Houses> {
                                   width: 48,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(30),
-                                      color: Colors.red),
+                                      color: Colors.orange),
                                   child: Text(
                                     house.type,
                                     style: TextStyle(

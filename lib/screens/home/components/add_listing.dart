@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:realstate/provider/house_provider.dart';
-import 'package:realstate/provider/user_provider.dart';
+import 'package:realstate/provider/realtor_provider.dart';
 
 class Add_Listing extends ConsumerStatefulWidget {
   @override
@@ -290,7 +290,7 @@ TextFormField(
                           int.parse(garagesController.text),
                           descriptionController.text,
                           false,
-                          'pending...',
+                          false,
                           int.parse(phoneController.text),
                           selectedOption,
                         );

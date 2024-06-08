@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:realstate/constants/constants.dart';
 import 'package:realstate/model/house.dart';
 import 'package:realstate/provider/house_provider.dart';
-import 'package:realstate/provider/user_provider.dart';
+import 'package:realstate/provider/realtor_provider.dart';
 
 class HouseDetails extends ConsumerStatefulWidget {
   final int index;
@@ -65,7 +65,7 @@ class _HouseDetailsState extends ConsumerState<HouseDetails> {
                               ],
                             ),
                             Text(
-                              '${DateFormat(' HH').format(house_list[widget.index].postTime.toDate())} hours ago',
+                              '${DateFormat(' HH').format(house_list[widget.index].postTime!.toDate())} hours ago',
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,

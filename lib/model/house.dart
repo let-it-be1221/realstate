@@ -17,8 +17,8 @@ class House {
   final int kitchen;
   final int garages;
   final String description;
-  bool isFav;
-  final status;
+   bool isFav;
+   bool status;
   //final String imageUrl;
   final List<String> imageUrls;
   final Timestamp postTime;
@@ -59,7 +59,7 @@ class House {
     List<String>? imageUrls,
     Timestamp? postTime,
     bool? isFav,
-    String? status,
+    bool? status,
     String? type,
   }) {
     return House(
@@ -120,7 +120,7 @@ class House {
       ),
       postTime: map['postTime'],
       isFav: map['isFav'],
-      status: map['status'] as String,
+      status: map['status'] as bool,
       phone_number: map['phone_number'] as int,
       type: map['type'] as String,
     );

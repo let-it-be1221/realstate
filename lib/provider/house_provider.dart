@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:realstate/model/house.dart';
 import 'package:realstate/model/support.dart';
-import 'package:realstate/provider/user_provider.dart';
+import 'package:realstate/provider/realtor_provider.dart';
 
 final feedProvider = StreamProvider.autoDispose<List<House>>((ref) {
   return FirebaseFirestore.instance
@@ -49,7 +49,7 @@ class HouseApi {
     int garages,
     String description,
     bool isFav,
-    String status,
+    bool status,
     int phone_number,
     String type,
   ) async {
@@ -98,9 +98,6 @@ class HouseApi {
   }
 
   Stream<List<House>> get favoriteHousesStream {
-    //LocalUser currentUser = ref.read(userProvider);
-   // House house = ref.read(houseProvider as ProviderListenable<House>);
-
     return _firestore
         .collection('houses')
         //.where('uid', isEqualTo: house.uid)
@@ -113,6 +110,8 @@ class HouseApi {
       }).toList();
     });
   }
+
+
 
   Future<void> requestSupport(String name, String email, String subject) async {
     LocalUser currentUser = ref.read(userProvider);
@@ -188,6 +187,47 @@ class HouseApi {
       print('Error removing from favorites: $error');
     }
   }
+
+
+Future<void> approve(uid) async
+{
+  try{
+final docSnapshot =
+          await _firestore.collection('houses').doc(uid).get();
+          if(docSnapshot.exists)
+          {
+            await _firestore
+            .collection('houses')
+            .doc(uid)
+            .update({'status': true});
+          }
+
+
+  }catch(error)
+  {
+
+  }
+}
+
+
+Future<void> reject(uid) async
+{
+  try {
+      final docSnapshot =
+          await _firestore.collection('houses').doc(uid).get();
+
+      if (docSnapshot.exists) {
+        await _firestore.collection('houses').doc(uid).delete();
+       
+      }  
+    } catch (error) {
+      print('Error removing from favorites: $error');
+    }
+}
+
+
+
+
 
 /////////////////////////////////
 

@@ -15,16 +15,16 @@ final userProvider = StateNotifierProvider<UserNotifier, LocalUser>((ref) {
 
 class LocalUser {
   final String id;
-  final FirebaseUser user;
-  LocalUser({required this.id, required this.user});
+  final FirebaseUser realtor;
+  LocalUser({required this.id, required this.realtor});
 
   LocalUser copyWith({
     String? id,
-    FirebaseUser? user,
+    FirebaseUser? realtor,
   }) {
     return LocalUser(
       id: id ?? this.id,
-      user: user ?? this.user,
+      realtor: realtor ?? this.realtor,
     );
   }
 }
@@ -33,7 +33,7 @@ class UserNotifier extends StateNotifier<LocalUser> {
   UserNotifier()
       : super(LocalUser(
             id: "error",
-            user: FirebaseUser(
+            realtor: FirebaseUser(
                 email: "error", name: 'error', profilePic: 'error')));
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
@@ -42,7 +42,7 @@ class UserNotifier extends StateNotifier<LocalUser> {
 
   Future<void> login(String email) async {
     QuerySnapshot response = await _firestore
-        .collection("users")
+        .collection("realtors")
         .where('email', isEqualTo: email)
         .get();
     if (response.docs.isEmpty) {
@@ -55,7 +55,7 @@ class UserNotifier extends StateNotifier<LocalUser> {
     }
     state = LocalUser(
         id: response.docs[0].id,
-        user: FirebaseUser.fromMap(
+        realtor: FirebaseUser.fromMap(
             response.docs[0].data() as Map<String, dynamic>));
   }
 
@@ -63,7 +63,7 @@ class UserNotifier extends StateNotifier<LocalUser> {
 
 
   Future<void> signUp(String email) async {
-    DocumentReference response = await _firestore.collection("users").add(
+    DocumentReference response = await _firestore.collection("realtors").add(
         FirebaseUser(
                 email: email,
                 name: 'NoName',
@@ -73,26 +73,26 @@ class UserNotifier extends StateNotifier<LocalUser> {
     DocumentSnapshot snapshot = await response.get();
     state = LocalUser(
         id: response.id,
-        user: FirebaseUser.fromMap(snapshot.data() as Map<String, dynamic>));
+        realtor: FirebaseUser.fromMap(snapshot.data() as Map<String, dynamic>));
   }
 
 // Update Name
 
   Future<void> updateName(String name) async {
-    await _firestore.collection("users").doc(state.id).update({'name': name,});
-    state = state.copyWith(user: state.user.copyWith(name: name));
+    await _firestore.collection("realtors").doc(state.id).update({'name': name,});
+    state = state.copyWith(realtor: state.realtor.copyWith(name: name));
   }
 
   // Update Image
   Future<void> updateImage(File image) async {
-    Reference ref = _storage.ref().child("users").child(state.id);
+    Reference ref = _storage.ref().child("realtors").child(state.id);
     TaskSnapshot snapshot = await ref.putFile(image);
     String profilePicUrl = await snapshot.ref.getDownloadURL();
     await _firestore
-        .collection("users")
+        .collection("realtors")
         .doc(state.id)
         .update({'profilePic': profilePicUrl});
-    state = state.copyWith(user: state.user.copyWith(profilePic: profilePicUrl));
+    state = state.copyWith(realtor: state.realtor.copyWith(profilePic: profilePicUrl));
   }
 
 
@@ -113,6 +113,6 @@ class UserNotifier extends StateNotifier<LocalUser> {
   void logOut() {
     state = LocalUser(
         id: "error",
-        user: FirebaseUser(email: "error", name: 'error', profilePic: 'error'));
+        realtor: FirebaseUser(email: "error", name: 'error', profilePic: 'error'));
   }
 }

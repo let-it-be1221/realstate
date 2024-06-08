@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:realstate/constants/constants.dart';
 import 'package:realstate/firebase_options.dart';
-import 'package:realstate/provider/user_provider.dart';
+import 'package:realstate/provider/realtor_provider.dart';
 import 'package:realstate/screens/home/components/login.dart';
 import 'package:realstate/screens/home/components/main_pages.dart';
 import 'package:realstate/screens/home/components/settings.dart';
+import 'package:realstate/screens/home/components/splassh_screen.dart';
 import 'package:realstate/screens/home/home_screen.dart';
 
 void main() async{
@@ -33,7 +34,11 @@ class MyApp extends ConsumerWidget {
         scaffoldBackgroundColor: white
       ),
      // home: MainPage(),
-     home: StreamBuilder<User?>(
+     home: 
+     
+     
+     
+     StreamBuilder<User?>(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -43,6 +48,27 @@ class MyApp extends ConsumerWidget {
             return Login();
           }
           ),
+
+
+
+//  StreamBuilder<User?>(
+//           stream: FirebaseAuth.instance.authStateChanges(),
+//           builder: (context, snapshot) {
+//             if (snapshot.hasData) {
+//               ref.watch(userProvider.notifier).login(snapshot.data!.email!);
+//               return SplashScreen();
+//             }
+//             return Login();
+//           }
+//           ),
+
+
+
+
+
+
+
+
     );
   }
 }
